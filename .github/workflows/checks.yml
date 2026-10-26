@@ -1,0 +1,34 @@
+name: checks
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['hooks/**', 'tests/**', 'types/**', '.claude-plugin/**', '.github/workflows/checks.yml']
+  pull_request:
+    paths: ['hooks/**', 'tests/**', 'types/**', '.claude-plugin/**', '.github/workflows/checks.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Claude Code 2.1.306
+        run: npm install -g @anthropic-ai/claude-code@2.1.306 && claude --version
+      - name: Validate the mod and its marketplace
+        run: claude plugin validate .
+      - name: Tests
+        run: claude plugin test .

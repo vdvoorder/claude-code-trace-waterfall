@@ -1,0 +1,31 @@
+{
+  "name": "trace-waterfall",
+  "version": "0.1.0",
+  "description": "A live waterfall of each turn in a side pane: every model call, tool call and subagent as a bar on one time axis, with duration and estimated cost",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Ruben Van de Voorde"
+  },
+  "repository": "https://github.com/vdvoorder/claude-code-trace-waterfall",
+  "keywords": [
+    "trace",
+    "waterfall",
+    "timeline",
+    "cost",
+    "mod",
+    "pane"
+  ],
+  "userConfig": {
+    "start": {
+      "type": "string",
+      "title": "Open at start",
+      "description": "on: the Trace pane opens when a session starts; in the terminal it shows once the window is at least 144 columns wide. off: it stays closed until you run /trace-waterfall.",
+      "default": "on",
+      "options": [
+        "on",
+        "off"
+      ]
+    }
+  },
+  "license": "MIT"
+}

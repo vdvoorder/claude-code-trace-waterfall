@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+git diff --cached --quiet -- hooks tests types .claude-plugin && exit 0
+claude plugin validate . >/dev/null || { claude plugin validate .; exit 1; }
+out=$(claude plugin test . 2>&1) || { printf '%s\n' "$out"; exit 1; }
+printf '%s\n' "$out" | tail -2

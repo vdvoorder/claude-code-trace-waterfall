@@ -1,0 +1,16 @@
+{
+  "name": "claude-code-trace-waterfall",
+  "owner": {
+    "name": "Ruben Van de Voorde"
+  },
+  "metadata": {
+    "description": "A live waterfall of where the time and cost of each Claude Code turn go"
+  },
+  "plugins": [
+    {
+      "name": "trace-waterfall",
+      "description": "Every model call, tool call and subagent of a turn as a bar on one time axis, with duration and estimated cost",
+      "source": "./"
+    }
+  ]
+}
