@@ -520,8 +520,9 @@ export const register: Register = (on, options) => {
       const at = live ? await read($, now) : 0
       const palette = PALETTES[await read($, theme)]
       const chosen = await read($, selected)
-      const selectedId = chosen !== null && trace.spans.some(span => span.id === chosen) ? chosen : null
-      const scope = selectedId === null ? trace.spans : subtreeOf(trace, selectedId)
+      const subtree = chosen === null ? [] : subtreeOf(trace, chosen)
+      const selectedId = subtree.length > 0 ? chosen : null
+      const scope = selectedId === null ? trace.spans : subtree
       const figures = figuresOf(scope, at)
       const chart = chartOf(trace, at, Math.max(24, e.props.bodyColumns), palette, selectedId)
       const isFirst = index === 0

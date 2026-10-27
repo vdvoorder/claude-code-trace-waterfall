@@ -305,13 +305,28 @@ export function isLive(trace: Trace): boolean {
 
 export type Row = { span: Span; depth: number }
 
+function soleTurnOf(trace: Trace): Span | undefined {
+  const turns = trace.spans.filter(span => span.kind === 'turn' && span.id !== trace.id)
+
+  return turns.length === 1 ? turns[0] : undefined
+}
+
 export function rowsOf(trace: Trace): Row[] {
+  const sole = soleTurnOf(trace)
   const children = new Map<string | null, Span[]>()
 
   for (const span of trace.spans) {
-    const parent = span.id === trace.id ? null : span.parent
+    if (span.id === sole?.id) {
+      continue
+    }
+
+    const parent = span.id === trace.id ? null : span.parent === sole?.id ? trace.id : span.parent
+    const shown =
+      span.id === trace.id && sole !== undefined
+        ? { ...span, end: Math.max(span.end, sole.end), pending: sole.pending, isError: span.isError || sole.isError }
+        : span
     const list = children.get(parent) ?? []
-    list.push(span)
+    list.push(shown)
     children.set(parent, list)
   }
 
@@ -335,7 +350,7 @@ export function rowsOf(trace: Trace): Row[] {
   walk(null, 0)
 
   for (const span of trace.spans) {
-    if (!seen.has(span.id)) {
+    if (!seen.has(span.id) && span.id !== sole?.id) {
       seen.add(span.id)
       rows.push({ span, depth: 1 })
     }

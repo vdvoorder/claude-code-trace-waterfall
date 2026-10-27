@@ -1,7 +1,19 @@
 import { expect, mock, test } from 'claude-code/testing'
 import type { TestBody } from 'claude-code/testing'
 
-import { barCells, costOf, describeTool, formatDuration, modelLabel } from '../hooks/trace'
+import type { Trace } from '../types'
+import {
+  addSpan,
+  barCells,
+  completeMain,
+  continueRequest,
+  costOf,
+  describeTool,
+  formatDuration,
+  modelLabel,
+  rowsOf,
+  startRequest,
+} from '../hooks/trace'
 
 const PANE = {
   plugin: 'trace-waterfall',
@@ -21,6 +33,21 @@ test('bar ends land on eighths of a cell', async () => {
   const cells = barCells(4, 20, 4).map(cell => `${cell.glyph}${cell.mode}`)
 
   expect(cells).toEqual(['▌inverse', '█solid', '▌solid', ' empty'])
+})
+
+test('a request with one turn draws its calls under the Request row', async () => {
+  const rowsAt = (traces: Trace[]): string[] =>
+    traces.flatMap(trace => rowsOf(trace).map(row => `${row.span.id} ${row.depth}`))
+  const started = startRequest([], 't1', 'Fix the build', 1000)
+  const read = addSpan(started, { trace: 'request:t1', span: 't1' }, { id: 'r1', kind: 'tool', name: 'Read', details: [], start: 1200 }, null)
+  const failed = completeMain(read, 't1', 5000, true)
+
+  expect(rowsAt(failed)).toEqual(['request:t1 0', 'r1 1'])
+  expect(failed.flatMap(trace => rowsOf(trace).slice(0, 1).map(row => [row.span.end, row.span.isError]))).toEqual([[5000, true]])
+
+  const later = continueRequest(failed, 'request:t1', 't2', 'after a background task', 9000)
+
+  expect(rowsAt(later)).toEqual(['request:t1 0', 't1 1', 'r1 2', 't2 1'])
 })
 
 test('names, prices and durations', async () => {
@@ -73,7 +100,7 @@ test('a running call grows every second with no new event', async ($, on) => {
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
 
   expect(await ui.find({ type: 'Text', text: /running/ })).toBeDefined()
-  expect((await ui.find({ key: 'b1' }))?.text).toMatch(/Bash npm test.* 3\.0s/)
+  expect((await ui.find({ key: 'b1' }))?.text).toMatch(/Bash Run the checkout tests.* 3\.0s/)
 
   await clock.advance(1000)
   expect((await ui.find({ key: 'b1' }))?.text).toMatch(/ 4\.0s/)
@@ -283,7 +310,7 @@ test('an agent started inside a subagent is drawn under it, and a failed agent c
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
   const rows = (await ui.findAll({ type: 'Button' })).map(found => found.key)
 
-  expect(rows).toEqual(['earlier', 'later', 'request:t1', 't1', 'ag1', 'ag2', 'g2'])
+  expect(rows).toEqual(['earlier', 'later', 'request:t1', 'ag1', 'ag2', 'g2'])
   expect((await ui.find({ key: 'ag2' }))?.text).toMatch(/3\.0s/)
   expect((await ui.find({ key: 'ag1' }))?.text).toMatch(/8\.0s/)
   expect(await ui.find({ type: 'Text', text: /Errors +1/ })).toBeDefined()

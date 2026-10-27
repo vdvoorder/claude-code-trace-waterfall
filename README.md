@@ -42,7 +42,8 @@ To update, run `claude plugin update trace-waterfall@claude-code-trace-waterfall
 
 ## Features
 
-- One row per span: the request, each turn, each model call, each tool call and each subagent, nested under what started it and drawn as a bar on one time axis
+- One row per span: the request, each model call, each tool call and each subagent, nested under what started it and drawn as a bar on one time axis
+- A request with more than one turn, such as a turn after a background task or a subagent's message, also gets a row for each turn
 - Live: a running call grows every second, and a line marks the present moment
 - Subagents nest under the Agent call that started them, with their own model and tool calls, also when a subagent starts another
 - The header sums the request: duration, estimated cost, tokens in and out, model calls, tool calls and errors
