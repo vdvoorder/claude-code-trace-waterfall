@@ -27,7 +27,13 @@ herdr-app check ~/.config/herdr-app/mods/trace-waterfall
 
 When `HERDR_APP_HOME` is set, copy the folder into its `mods` folder instead. The check prints `check passed` when the panel loads.
 
-The first time Herdr sees the folder, it docks the panel at the right edge of the layout on screen, 460 px wide and as tall as the window. After that the layout decides: the panel is a block with the content `{ "mod": "trace-waterfall" }`, which you can move or resize in your own layout. To update the panel, copy the folder again; Herdr reloads it in place. To remove it, delete the folder and the block.
+Herdr does not place the panel by itself. To open it from the tab bar like Files and Changes, in your own copy of the Herdr layout (Herdr's layouts are read-only, so clone `main` first with `herdr-app do layout.clone '{"name":"main","as":"my-layout"}'`):
+
+1. Clone the tab bar: `herdr-app do mod.clone '{"name":"tabs","as":"tabs-trace"}'`.
+2. In `mods/tabs-trace/main.js`, add `"trace"` to the list of panels, `const enabled = [...(shared("workspace.panels") ?? ["files", "changes"]), "trace"];`, and a button after the Changes one: `.when(enabled.includes("trace"), el => el.child(panelButton("trace", "Trace", "mods/trace-waterfall/trace.svg")))`.
+3. In your layout file, set the `tabs` block's content to `{ "mod": "tabs-trace" }` and add `{ "id": "trace", "type": "block", "content": { "mod": "trace-waterfall" } }` to the children of the `panel-body` stack, after `changes`.
+
+Herdr reloads a saved layout or mod at once; `herdr-app status` lists an error when an edit does not load. To update the panel, copy the folder again. To remove it, delete the folder, the `trace` block and the button.
 
 ## Use
 
