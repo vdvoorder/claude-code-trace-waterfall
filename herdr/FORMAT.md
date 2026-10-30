@@ -17,7 +17,7 @@ The mod creates the `trace-waterfall/live` folder when it is missing.
 {
   "format": "trace-waterfall/1",
   "terminal": "t9",
-  "session": "3a8a808b-53e0-4194-a1e2-fc904d1c3235",
+  "session": "5f2c9e1a-7b3d-4c8e-9a6f-2d1b0e4c7a93",
   "written": 1793380000000,
   "theme": "dark",
   "main": null,
