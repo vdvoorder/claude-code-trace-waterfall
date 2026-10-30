@@ -37,7 +37,7 @@ Herdr reloads a saved layout or mod at once; `herdr-app status` lists an error w
 
 ## Use
 
-- Docked, the panel shows the trace of the focused terminal. While a mod pane has the focus, it keeps the terminal it showed.
+- In the side panel, it shows the trace of the focused terminal. While a mod pane has the focus, it keeps the terminal it showed.
 - Beside one terminal, the panel shows that terminal only, whatever has the focus:
 
   ```powershell
