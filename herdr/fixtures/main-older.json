@@ -1,0 +1,529 @@
+{
+  "format": "trace-waterfall/1",
+  "terminal": "t9",
+  "session": "3a8a808b-53e0-4194-a1e2-fc904d1c3235",
+  "written": 1793380030300,
+  "theme": "dark",
+  "main": "request:turn-a",
+  "traces": [
+    {
+      "id": "request:turn-a",
+      "prompt": "Rename old_helper in utils.py to parse_row and update its callers.",
+      "start": 1793379700000,
+      "spans": [
+        {
+          "id": "request:turn-a",
+          "parent": null,
+          "kind": "turn",
+          "name": "Request",
+          "details": [],
+          "loop": null,
+          "start": 1793379700000,
+          "end": 1793379700000,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "turn-a",
+          "parent": "request:turn-a",
+          "kind": "turn",
+          "name": "Turn",
+          "details": [],
+          "loop": null,
+          "start": 1793379700000,
+          "end": 1793379714900,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-a:0",
+          "parent": "turn-a",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793379700300,
+          "end": 1793379704300,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 6,
+            "output": 210,
+            "cacheRead": 41000,
+            "cacheWrite": 3200
+          },
+          "cost": 0.028424,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_a1",
+          "parent": "turn-a",
+          "kind": "tool",
+          "name": "Grep",
+          "details": [
+            "old_helper"
+          ],
+          "loop": null,
+          "start": 1793379704400,
+          "end": 1793379704700,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-a:1",
+          "parent": "turn-a",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793379704800,
+          "end": 1793379707900,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 4,
+            "output": 380,
+            "cacheRead": 44200,
+            "cacheWrite": 900
+          },
+          "cost": 0.020956,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_a2",
+          "parent": "turn-a",
+          "kind": "tool",
+          "name": "Edit",
+          "details": [
+            "demo/utils.py",
+            "utils.py"
+          ],
+          "loop": null,
+          "start": 1793379708000,
+          "end": 1793379708300,
+          "pending": 0,
+          "isError": true,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-a:2",
+          "parent": "turn-a",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793379708400,
+          "end": 1793379710900,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 4,
+            "output": 260,
+            "cacheRead": 45100,
+            "cacheWrite": 700
+          },
+          "cost": 0.017736,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_a3",
+          "parent": "turn-a",
+          "kind": "tool",
+          "name": "Edit",
+          "details": [
+            "demo/utils.py",
+            "utils.py"
+          ],
+          "loop": null,
+          "start": 1793379711000,
+          "end": 1793379711250,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_a4",
+          "parent": "turn-a",
+          "kind": "tool",
+          "name": "Edit",
+          "details": [
+            "demo/report.py",
+            "report.py"
+          ],
+          "loop": null,
+          "start": 1793379711300,
+          "end": 1793379711500,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-a:3",
+          "parent": "turn-a",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793379711600,
+          "end": 1793379714800,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 4,
+            "output": 190,
+            "cacheRead": 46000,
+            "cacheWrite": 600
+          },
+          "cost": 0.016016,
+          "prompt": null,
+          "agentId": null
+        }
+      ]
+    },
+    {
+      "id": "request:turn-b",
+      "prompt": "Start one Explore subagent that lists the files in this folder with their sizes. Meanwhile, compute the mean of y per dataset in anscombe.csv with a Python one-liner in the shell, without writing any file. Then sum up both in two sentences.",
+      "start": 1793380000000,
+      "spans": [
+        {
+          "id": "request:turn-b",
+          "parent": null,
+          "kind": "turn",
+          "name": "Request",
+          "details": [],
+          "loop": null,
+          "start": 1793380000000,
+          "end": 1793380000000,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "turn-b",
+          "parent": "request:turn-b",
+          "kind": "turn",
+          "name": "Turn",
+          "details": [],
+          "loop": null,
+          "start": 1793380000000,
+          "end": 1793380024100,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-b:0",
+          "parent": "turn-b",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793380000200,
+          "end": 1793380013200,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 10,
+            "output": 900,
+            "cacheRead": 30000,
+            "cacheWrite": 30500
+          },
+          "cost": 0.17654,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_b1",
+          "parent": "turn-b",
+          "kind": "agent",
+          "name": "Agent",
+          "details": [
+            "List folder files with sizes",
+            "Explore"
+          ],
+          "loop": null,
+          "start": 1793380012800,
+          "end": 1793380029000,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": null,
+          "cost": null,
+          "prompt": "List the files in this folder with their sizes.",
+          "agentId": "a1b2c3"
+        },
+        {
+          "id": "step:agent-a1b2c3:0",
+          "parent": "toolu_b1",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": "a1b2c3",
+          "start": 1793380013400,
+          "end": 1793380018900,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 8,
+            "output": 420,
+            "cacheRead": 0,
+            "cacheWrite": 18000
+          },
+          "cost": 0.098432,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_b2",
+          "parent": "toolu_b1",
+          "kind": "tool",
+          "name": "Bash",
+          "details": [
+            "List every file in the folder with its size in bytes, largest first",
+            "find . -type f -not -path './.git/*' -printf '%s %p\\n' | sort -rn",
+            "find"
+          ],
+          "loop": "a1b2c3",
+          "start": 1793380019000,
+          "end": 1793380025700,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:agent-a1b2c3:1",
+          "parent": "toolu_b1",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": "a1b2c3",
+          "start": 1793380025800,
+          "end": 1793380028300,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 6,
+            "output": 310,
+            "cacheRead": 18000,
+            "cacheWrite": 1200
+          },
+          "cost": 0.015824,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_b5",
+          "parent": "toolu_b1",
+          "kind": "tool",
+          "name": "SubagentHandback",
+          "details": [],
+          "loop": "a1b2c3",
+          "start": 1793380028400,
+          "end": 1793380028945,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_b3",
+          "parent": "turn-b",
+          "kind": "tool",
+          "name": "Read",
+          "details": [
+            "anscombe/anscombe.csv",
+            "anscombe.csv"
+          ],
+          "loop": null,
+          "start": 1793380013300,
+          "end": 1793380013336,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-b:1",
+          "parent": "turn-b",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793380013400,
+          "end": 1793380017500,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 6,
+            "output": 500,
+            "cacheRead": 60500,
+            "cacheWrite": 1500
+          },
+          "cost": 0.029624,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_b4",
+          "parent": "turn-b",
+          "kind": "tool",
+          "name": "PowerShell",
+          "details": [
+            "Compute the mean of y per dataset with a Python one-liner",
+            "python -c \"import csv,collections; ...\"",
+            "python"
+          ],
+          "loop": null,
+          "start": 1793380017600,
+          "end": 1793380019800,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-b:2",
+          "parent": "turn-b",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793380019900,
+          "end": 1793380024000,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 6,
+            "output": 450,
+            "cacheRead": 62000,
+            "cacheWrite": 1100
+          },
+          "cost": 0.026924,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "turn-b2",
+          "parent": "request:turn-b",
+          "kind": "turn",
+          "name": "Turn",
+          "details": [
+            "after an agent message"
+          ],
+          "loop": null,
+          "start": 1793380026300,
+          "end": 1793380030200,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-b2:0",
+          "parent": "turn-b2",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793380026500,
+          "end": 1793380030100,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 6,
+            "output": 380,
+            "cacheRead": 63000,
+            "cacheWrite": 900
+          },
+          "cost": 0.024724,
+          "prompt": null,
+          "agentId": null
+        }
+      ]
+    }
+  ]
+}

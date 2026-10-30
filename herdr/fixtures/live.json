@@ -1,0 +1,243 @@
+{
+  "format": "trace-waterfall/1",
+  "terminal": "t9",
+  "session": "3a8a808b-53e0-4194-a1e2-fc904d1c3235",
+  "written": 1793381024000,
+  "theme": "dark",
+  "main": "request:turn-c",
+  "traces": [
+    {
+      "id": "request:turn-c",
+      "prompt": "Review the open PR, and run the whole test suite in a background agent while you read the diff.",
+      "start": 1793381000000,
+      "spans": [
+        {
+          "id": "request:turn-c",
+          "parent": null,
+          "kind": "turn",
+          "name": "Request",
+          "details": [],
+          "loop": null,
+          "start": 1793381000000,
+          "end": 1793381000000,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "turn-c",
+          "parent": "request:turn-c",
+          "kind": "turn",
+          "name": "Turn",
+          "details": [],
+          "loop": null,
+          "start": 1793381000000,
+          "end": 1793381000000,
+          "pending": 1,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-c:0",
+          "parent": "turn-c",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793381000200,
+          "end": 1793381005200,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 12,
+            "output": 640,
+            "cacheRead": 28000,
+            "cacheWrite": 26000
+          },
+          "cost": 0.148448,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_c1",
+          "parent": "turn-c",
+          "kind": "agent",
+          "name": "Agent",
+          "details": [
+            "Run the test suite",
+            "general-purpose"
+          ],
+          "loop": null,
+          "start": 1793381005300,
+          "end": 1793381005500,
+          "pending": 1,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": null,
+          "cost": null,
+          "prompt": "Run the whole test suite and report failures.",
+          "agentId": "c9d8e7"
+        },
+        {
+          "id": "step:agent-c9d8e7:0",
+          "parent": "toolu_c1",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": "c9d8e7",
+          "start": 1793381005600,
+          "end": 1793381009000,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 8,
+            "output": 300,
+            "cacheRead": 0,
+            "cacheWrite": 16000
+          },
+          "cost": 0.086032,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_c2",
+          "parent": "toolu_c1",
+          "kind": "tool",
+          "name": "Bash",
+          "details": [
+            "Run the tests",
+            "npm test",
+            "npm"
+          ],
+          "loop": "c9d8e7",
+          "start": 1793381009100,
+          "end": 1793381021000,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:agent-c9d8e7:1",
+          "parent": "toolu_c1",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": "c9d8e7",
+          "start": 1793381021100,
+          "end": 1793381021100,
+          "pending": 1,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_c3",
+          "parent": "turn-c",
+          "kind": "tool",
+          "name": "Bash",
+          "details": [
+            "Show the PR diff",
+            "gh pr diff 42",
+            "gh"
+          ],
+          "loop": null,
+          "start": 1793381005600,
+          "end": 1793381007400,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-c:1",
+          "parent": "turn-c",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793381007500,
+          "end": 1793381011800,
+          "pending": 0,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": {
+            "input": 6,
+            "output": 520,
+            "cacheRead": 54000,
+            "cacheWrite": 9000
+          },
+          "cost": 0.066224,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "toolu_c4",
+          "parent": "turn-c",
+          "kind": "tool",
+          "name": "Read",
+          "details": [
+            "src/parse.ts",
+            "parse.ts"
+          ],
+          "loop": null,
+          "start": 1793381011900,
+          "end": 1793381011960,
+          "pending": 0,
+          "isError": false,
+          "model": null,
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        },
+        {
+          "id": "step:turn-c:2",
+          "parent": "turn-c",
+          "kind": "model",
+          "name": "Model call",
+          "details": [
+            "Opus 5.5"
+          ],
+          "loop": null,
+          "start": 1793381012100,
+          "end": 1793381012100,
+          "pending": 1,
+          "isError": false,
+          "model": "claude-opus-5-5",
+          "usage": null,
+          "cost": null,
+          "prompt": null,
+          "agentId": null
+        }
+      ]
+    }
+  ]
+}

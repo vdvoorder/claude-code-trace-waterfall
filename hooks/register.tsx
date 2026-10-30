@@ -1,9 +1,11 @@
 import { atom, read, update } from 'claude-code'
-import type { EngineInterface, Register, TurnStepResult } from 'claude-code'
+import type { EngineInterface, Register, Timer, TurnStepResult } from 'claude-code'
 
 import type { AgentLink, Theme, Trace } from '../types'
 import { chartOf, INK_COLOR, NOW_COLOR, PALETTES } from './draw'
 import type { Palette, Run } from './draw'
+import { LIVE_INTERVAL, livePayload, liveTarget, liveText } from './live'
+import type { LiveTarget } from './live'
 import {
   AGENT_PREFIX,
   addSpan,
@@ -53,6 +55,11 @@ let queue: Promise<unknown> = Promise.resolve()
 let upcoming: Arrival | null = null
 const reported = new Set<string>()
 
+let live: Promise<LiveTarget | null> | null = null
+let liveTimer: Timer | null = null
+let lastWrite = Number.NEGATIVE_INFINITY
+let writing: Promise<void> = Promise.resolve()
+
 function arrivalOf(kind: string | null, text: string): Arrival {
   const agentId = /<agent-message from="([^"]+)"/.exec(text)?.[1] ?? null
 
@@ -76,15 +83,25 @@ function reasonOf(error: unknown): string {
 }
 
 function inOrder($: EngineInterface, label: string, job: () => Promise<unknown>): Promise<void> {
-  const run = queue.then(job).then(
-    () => undefined,
-    error => {
-      if (!reported.has(label)) {
-        reported.add(label)
-        $.ui.log(`${PLUGIN}: ${label} failed: ${reasonOf(error).replace(/\s+/g, ' ').slice(0, 300)}`)
-      }
-    },
-  )
+  const run = queue
+    .then(job)
+    .then(
+      () => undefined,
+      error => {
+        if (!reported.has(label)) {
+          reported.add(label)
+          $.ui.log(`${PLUGIN}: ${label} failed: ${reasonOf(error).replace(/\s+/g, ' ').slice(0, 300)}`)
+        }
+      },
+    )
+    .then(() => markLive($))
+  queue = run
+
+  return run
+}
+
+function afterQueue(job: () => Promise<void>): Promise<void> {
+  const run = queue.then(job)
   queue = run
 
   return run
@@ -92,6 +109,93 @@ function inOrder($: EngineInterface, label: string, job: () => Promise<unknown>)
 
 function stamp($: EngineInterface): Promise<number> {
   return $.clock.now().catch(() => Date.now())
+}
+
+async function findLive($: EngineInterface): Promise<LiveTarget | null> {
+  const terminal = await $.env.get('HC_TERMINAL_ID')
+
+  if (terminal === undefined) {
+    return null
+  }
+
+  return liveTarget({
+    terminal,
+    os: await $.env.get('OS'),
+    localAppData: await $.env.get('LOCALAPPDATA'),
+    xdgStateHome: await $.env.get('XDG_STATE_HOME'),
+    home: await $.env.get('HOME'),
+  })
+}
+
+function liveOf($: EngineInterface): Promise<LiveTarget | null> {
+  live ??= findLive($).catch(() => null)
+
+  return live
+}
+
+function writeLive($: EngineInterface): Promise<void> {
+  const run = writing
+    .then(async () => {
+      const target = await liveOf($)
+
+      if (target === null) {
+        return
+      }
+
+      const payload = livePayload({
+        terminal: target.terminal,
+        session: await $.session.id(),
+        written: await stamp($),
+        theme: await read($, theme),
+        main: (await read($, main))?.trace ?? null,
+        traces: await read($, traces),
+      })
+
+      await $.fs.write(target.path, liveText(payload))
+    })
+    .catch(() => undefined)
+  writing = run
+
+  return run
+}
+
+async function scheduleLive($: EngineInterface): Promise<void> {
+  if (liveTimer !== null || (await liveOf($)) === null) {
+    return
+  }
+
+  const at = await stamp($)
+  const wait = lastWrite + LIVE_INTERVAL - at
+
+  if (wait <= 0) {
+    lastWrite = at
+    void writeLive($)
+
+    return
+  }
+
+  liveTimer = $.clock.after(wait, () => {
+    liveTimer = null
+    lastWrite = at + wait
+    void writeLive($)
+  })
+}
+
+function markLive($: EngineInterface): Promise<void> {
+  return scheduleLive($).catch(() => undefined)
+}
+
+async function flushLive($: EngineInterface): Promise<void> {
+  const pending = liveTimer
+  liveTimer = null
+  pending?.cancel()
+
+  if ((await liveOf($)) === null) {
+    return
+  }
+
+  lastWrite = await stamp($)
+  await writeLive($)
 }
 
 function toTheme(value: unknown): Theme {
@@ -336,6 +440,7 @@ export const register: Register = (on, options) => {
       void tick($).catch(() => undefined)
     })
     if (opensAtStart) void $.ui.open({ id: PANE, title: TITLE })
+    void afterQueue(() => markLive($))
 
     return next(e)
   })
@@ -365,6 +470,8 @@ export const register: Register = (on, options) => {
         await update($, view, () => null)
         await update($, selected, () => null)
       })
+    } else {
+      await afterQueue(() => flushLive($).catch(() => undefined))
     }
 
     return next(e)

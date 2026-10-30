@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Claude_Code-%E2%89%A5_2.1.306-D97757?logo=claude&logoColor=fff" alt="Claude Code 2.1.306 or newer">
-  <img src="https://img.shields.io/badge/version-0.1.1-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-0.2.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/type-mod-6f42c1" alt="Claude Code mod">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
@@ -59,6 +59,12 @@ Change the setting with `/plugin configure trace-waterfall@claude-code-trace-wat
 ```yaml
 Open at start:  on | off
 ```
+
+## Herdr panel
+
+When Claude Code runs inside a Herdr terminal, the mod also writes the session's traces to a file for that terminal, which a Herdr panel reads. The file is `%LOCALAPPDATA%\trace-waterfall\live\<terminal>.json` on Windows and `~/.local/state/trace-waterfall/live/<terminal>.json` (or under `$XDG_STATE_HOME`) on Linux and macOS; its format is in [herdr/FORMAT.md](herdr/FORMAT.md). Outside a Herdr terminal the mod writes no file.
+
+See herdr/README.md.
 
 ## Cost
 
