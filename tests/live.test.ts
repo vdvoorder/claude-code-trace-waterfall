@@ -51,10 +51,15 @@ function standIns(
   on: Parameters<TestBody>[1],
   session: { id: string },
   write: (path: string, text: string) => void,
+  opened: string[] = [],
 ): void {
   on('command.register', () => ({ value: { command: 'trace-waterfall' } }))
   on('tool.register', () => ({ value: { tool: 'mcp__trace-waterfall__open_pane' } }))
-  on('ui.open', () => ({ value: { isPlaced: true } }))
+  on('ui.open', (_, e) => {
+    opened.push(e.id)
+
+    return { value: { isPlaced: true } }
+  })
   on('config.list', () => ({ value: [] }))
   on('session.start', (_, e) => ({ cwd: e.cwd }))
   on('session.end', (_, e) => ({ sessionId: e.sessionId }))
@@ -234,6 +239,43 @@ test('outside a Herdr terminal the mod writes no file', async ($, on) => {
   await clock.advance(1000)
 
   expect(writes).toEqual([])
+})
+
+test('in a Herdr terminal the pane does not open at start, and /trace-waterfall still opens it', async ($, on) => {
+  const clock = mock.clock(on, { now: 1_000 })
+  const writes: Written[] = []
+  const opened: string[] = []
+
+  mock.env(on, HERDR_ON_WINDOWS)
+  standIns(on, { id: 'session-1' }, recorder(clock, writes), opened)
+
+  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
+  await clock.settle()
+
+  expect(opened).toEqual([])
+  expect(writes).toHaveLength(1)
+
+  const ran = await $.command.run({
+    command: 'trace-waterfall',
+    args: '',
+    origin: { kind: 'composer' },
+    presentation: { isFullscreen: true, columns: 160 },
+  })
+
+  expect(opened).toEqual(['trace'])
+  expect((ran as { text?: string }).text).toBe('Trace pane opened.')
+})
+
+test('outside a Herdr terminal the pane opens at start', async ($, on) => {
+  const clock = mock.clock(on, { now: 1_000 })
+  const opened: string[] = []
+
+  mock.env(on, { OS: 'Windows_NT', LOCALAPPDATA: 'C:\\Users\\ruben\\AppData\\Local' })
+  standIns(on, { id: 'session-1' }, recorder(clock, []), opened)
+
+  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
+
+  expect(opened).toEqual(['trace'])
 })
 
 test('a live file that cannot be written leaves the session and the pane as they were', async ($, on) => {

@@ -439,7 +439,7 @@ export const register: Register = (on, options) => {
     $.clock.every(1000, () => {
       void tick($).catch(() => undefined)
     })
-    if (opensAtStart) void $.ui.open({ id: PANE, title: TITLE })
+    if (opensAtStart && (await liveOf($)) === null) void $.ui.open({ id: PANE, title: TITLE })
     void afterQueue(() => markLive($))
 
     return next(e)

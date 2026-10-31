@@ -19,7 +19,7 @@
     "start": {
       "type": "string",
       "title": "Open at start",
-      "description": "on: the Trace pane opens when a session starts; in the terminal it shows once the window is at least 144 columns wide. off: it stays closed until you run /trace-waterfall.",
+      "description": "on: the Trace pane opens when a session starts; in the terminal it shows once the window is at least 144 columns wide, and in a Herdr terminal it stays closed, because the Herdr app shows the trace in its side panel. off: it stays closed until you run /trace-waterfall.",
       "default": "on",
       "options": [
         "on",
