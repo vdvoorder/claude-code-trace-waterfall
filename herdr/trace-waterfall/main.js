@@ -1,6 +1,6 @@
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, Scrollbar, v_virtual_list, VirtualListScrollHandle } from "gpui-base";
-import { focused, panes, props, settings, spaces, terminals, theme, watchFolder } from "herdr";
+import { focused, fonts, panes, props, settings, spaces, terminals, theme, watchFolder } from "herdr";
 import {
   displayEnd,
   domainOf,
@@ -20,6 +20,17 @@ import {
 } from "./trace.js";
 import { COST_WIDTH, DURATION_WIDTH, GUTTER, PALETTES, colorOf, detailOf, indentOf, layoutOf, nameWidthOf } from "./draw.js";
 import { fileName, liveFolder, readTrace, sameName } from "./live.js";
+
+const HEADING = "Bricolage Grotesque";
+let headingFamily;
+
+function headingFont() {
+  if (headingFamily === undefined) {
+    const all = typeof fonts === "function" ? fonts() : [];
+    headingFamily = all.find((name) => name === HEADING) ?? all.find((name) => name.startsWith(`${HEADING} `)) ?? null;
+  }
+  return headingFamily;
+}
 
 const TEXT = 12;
 const CHAR = TEXT * 0.6;
@@ -60,6 +71,7 @@ function itemsOf(figures, palette) {
 
 export default class TraceWaterfall extends View {
   init(_props, cx) {
+    headingFont();
     this.width = 420;
     this.entries = new Map();
     this.views = new Map();
@@ -270,8 +282,8 @@ export default class TraceWaterfall extends View {
           .items_center()
           .border_b(1)
           .border_color(t.border)
-          .child(div().font_semibold().text_size(13).child("Trace"))
-          .child(div().flex_1().min_w(0).text_right().text_color(t.dim).child(terminal ? this.where(terminal) : "")),
+          .child(div().when(headingFont() !== null, (el) => el.font_family(headingFont())).font_weight(600).text_size(15).child("Trace"))
+          .child(div().flex_1().min_w(0).text_right().text_color(t.muted).child(terminal ? this.where(terminal) : "")),
       );
 
     if (!terminal) return root.child(this.sentence(t, SENTENCES.none));
@@ -337,7 +349,7 @@ export default class TraceWaterfall extends View {
         .flex()
         .items_center()
         .flex_none()
-        .rounded(6)
+        .rounded(2)
         .border_1()
         .border_color(t.border)
         .whitespace_nowrap()
@@ -413,6 +425,7 @@ export default class TraceWaterfall extends View {
         .px(PAD)
         .pt(10)
         .gap(4)
+        .font_family(String(settings()?.font_family ?? "JetBrains Mono"))
         .child(
           h_flex()
             .gap(8)
@@ -474,7 +487,7 @@ export default class TraceWaterfall extends View {
             .flex_none()
             .items_end()
             .whitespace_nowrap()
-            .text_color(t.dim)
+            .text_color(t.muted)
             .child(div().w(gutterPx + labelPx).flex_none())
             .when(timelinePx > 0, (el) => el.child(div().ml(CHAR).w(timelinePx).h_full().flex_none().relative().children(labels)))
             .child(div().ml(CHAR).w(durationPx).flex_none().text_right().child("time"))
