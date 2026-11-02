@@ -20,8 +20,8 @@ export type Chart = { axis: Run[]; rows: ChartRow[] }
 export type Palette = { model: string; tool: string; error: string; neutral: string }
 
 export const PALETTES: Record<Theme, Palette> = {
-  dark: { model: '#8B7BFF', tool: '#1FA2B8', error: '#E5504A', neutral: '#7A7A78' },
-  light: { model: '#6650E0', tool: '#0086A3', error: '#C8352F', neutral: '#858583' },
+  dark: { model: '#4A86C8', tool: '#2FA281', error: '#DC7236', neutral: '#736D61' },
+  light: { model: '#3A74B4', tool: '#2A9C78', error: '#D8692E', neutral: '#B4AE9F' },
 }
 
 export const GRID_COLOR = 'subtle'
