@@ -1,6 +1,6 @@
 export const PALETTES = {
-  dark: { model: "#4A86C8", tool: "#2FA281", error: "#DC7236", neutral: "#736D61" },
-  light: { model: "#3A74B4", tool: "#2A9C78", error: "#D8692E", neutral: "#B4AE9F" },
+  dark: { model: "#B599FF", tool: "#2EC6C1", error: "#FF778E", neutral: "#778093" },
+  light: { model: "#7B57C8", tool: "#008E8B", error: "#CE3459", neutral: "#A5ABB8" },
 };
 
 export const GUTTER = 2;

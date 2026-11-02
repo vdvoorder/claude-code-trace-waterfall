@@ -48,7 +48,7 @@ To update, run `claude plugin update trace-waterfall@claude-code-trace-waterfall
 - Subagents nest under the Agent call that started them, with their own model and tool calls, also when a subagent starts another
 - The header sums the request: duration, estimated cost, tokens in and out, model calls, tool calls and errors
 - Click a row to sum only that span and what it started; click it again for the whole request
-- Model calls are blue, tool calls green and failed calls orange; the slowest call's duration is in bold
+- Model calls are violet, tool calls teal and failed calls pink; the request itself is a thin grey line, and the slowest call's duration is in bold
 - ◀ Earlier and Later ▶ page through the last 20 requests; a turn that answers a subagent's message joins the request that started the subagent
 - Ask Claude to show the trace, and it reopens the pane with the mod's own `open_pane` tool
 

@@ -40,6 +40,7 @@ const PAD = 12;
 const LINE = 18;
 const RECHECK = 10000;
 const RETRY = 5000;
+const STUCK = 30000;
 const PROMPT_LINES = 6;
 
 const SENTENCES = {
@@ -122,11 +123,11 @@ export default class TraceWaterfall extends View {
   reload(cx) {
     const terminal = this.terminal;
     if (!terminal || !this.folder || terminal.includes("/")) return;
-    if (this.loading) {
+    if (this.loading && Date.now() - this.loading < STUCK) {
       this.again = true;
       return;
     }
-    this.loading = true;
+    this.loading = Date.now();
     cx.spawn(async (cx) => {
       let result;
       try {
@@ -134,7 +135,7 @@ export default class TraceWaterfall extends View {
       } catch {
         result = { state: "unreadable" };
       }
-      this.loading = false;
+      this.loading = 0;
       const changed = this.apply(terminal, result);
       if (this.again || terminal !== this.terminal) {
         this.again = false;
@@ -400,7 +401,7 @@ export default class TraceWaterfall extends View {
               .relative()
               .children(grid.map((at) => div().absolute().top(0).bottom(0).left(at).w(1).border_l(1).border_dashed().border_color(t.border)))
               .when(nowX !== null, (el) => el.child(div().absolute().top(0).bottom(0).left(nowX).w(1).bg(t.working)))
-              .child(div().absolute().top((ROW - BAR) / 2).h(BAR).left(left).w(width).rounded(Math.min(2, width / 10)).bg(color)),
+              .child(span.id === trace.id ? div().absolute().top(ROW / 2 - 1).h(2).left(left).w(width).bg(color) : div().absolute().top((ROW - BAR) / 2).h(BAR).left(left).w(width).rounded(Math.min(2, width / 10)).bg(color)),
           ),
         )
         .child(

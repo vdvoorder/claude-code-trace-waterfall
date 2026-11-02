@@ -20,8 +20,8 @@ export type Chart = { axis: Run[]; rows: ChartRow[] }
 export type Palette = { model: string; tool: string; error: string; neutral: string }
 
 export const PALETTES: Record<Theme, Palette> = {
-  dark: { model: '#4A86C8', tool: '#2FA281', error: '#DC7236', neutral: '#736D61' },
-  light: { model: '#3A74B4', tool: '#2A9C78', error: '#D8692E', neutral: '#B4AE9F' },
+  dark: { model: '#B599FF', tool: '#2EC6C1', error: '#FF778E', neutral: '#778093' },
+  light: { model: '#7B57C8', tool: '#008E8B', error: '#CE3459', neutral: '#A5ABB8' },
 }
 
 export const GRID_COLOR = 'subtle'
@@ -197,8 +197,12 @@ export function chartOf(trace: Trace, now: number, width: number, palette: Palet
     runs.push(...labelRuns(span, depth, layout.label, isSelected), { text: ' ' })
 
     if (cells > 0) {
-      barCells(eighth(span.start), eighth(end), cells).forEach((cell, index) => {
-        if (cell.mode === 'solid') {
+      const from = eighth(span.start)
+      const to = eighth(end)
+      barCells(from, to, cells).forEach((cell, index) => {
+        if (span.id === trace.id && index * 8 < Math.max(to, from + 1) && (index + 1) * 8 > from) {
+          runs.push({ text: '─', color })
+        } else if (cell.mode === 'solid') {
           runs.push({ text: cell.glyph, color })
         } else if (cell.mode === 'inverse') {
           runs.push({ text: cell.glyph, color, inverse: true })
