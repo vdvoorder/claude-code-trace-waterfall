@@ -1,6 +1,6 @@
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, Scrollbar, v_virtual_list, VirtualListScrollHandle } from "gpui-base";
-import { focused, fonts, panes, props, settings, spaces, terminals, theme, watchFolder } from "herdr";
+import { focused, fonts, layout, panes, props, settings, spaces, terminals, theme, watchFolder } from "herdr";
 import {
   displayEnd,
   domainOf,
@@ -51,6 +51,27 @@ const SENTENCES = {
   unreadable: "The trace file of this terminal could not be read. The panel reads it again when the file changes.",
 };
 
+const MOD = "trace-waterfall";
+
+const placed = (node) => Boolean(node) && (node.content?.mod === MOD || (node.children ?? []).some(placed));
+
+const shownIn = (node) => {
+  if (!node || node.hidden) return false;
+  if (node.content?.mod === MOD) return true;
+  const children = node.children ?? [];
+  if (node.type === "stack") return shownIn(children.find((child) => child.id === node.active) ?? children[0]);
+  return children.some(shownIn);
+};
+
+function isShown() {
+  try {
+    const root = layout();
+    return placed(root) ? shownIn(root) : true;
+  } catch {
+    return true;
+  }
+}
+
 function isDark(color) {
   const hex = /^#([0-9a-f]{6})/i.exec(String(color ?? ""))?.[1];
   if (hex === undefined) return true;
@@ -84,8 +105,11 @@ export default class TraceWaterfall extends View {
     this.focus = cx.focus_handle();
     this.scroll = VirtualListScrollHandle.new();
     this.watch(cx);
+    this.dirty = false;
     cx.timer.every(1000, (cx) => {
-      if (this.ticking) cx.notify();
+      if (!(this.ticking || this.dirty) || !isShown()) return;
+      this.dirty = false;
+      cx.notify();
     });
   }
 
@@ -141,7 +165,10 @@ export default class TraceWaterfall extends View {
         this.again = false;
         this.reload(cx);
       }
-      if (changed) cx.notify();
+      if (changed) {
+        if (isShown()) cx.notify();
+        else this.dirty = true;
+      }
     });
   }
 
@@ -273,7 +300,7 @@ export default class TraceWaterfall extends View {
           cx.notify();
         }
       })
-      .child(
+      .when(props()?.bare !== true, (el) => el.child(
         h_flex()
           .min_h(42)
           .flex_none()
@@ -285,7 +312,7 @@ export default class TraceWaterfall extends View {
           .border_color(t.border)
           .child(div().when(headingFont() !== null, (el) => el.font_family(headingFont())).font_weight(600).text_size(15).child("Trace"))
           .child(div().flex_1().min_w(0).text_right().text_color(t.muted).child(terminal ? this.where(terminal) : "")),
-      );
+      ));
 
     if (!terminal) return root.child(this.sentence(t, SENTENCES.none));
     if (terminal.includes("/")) return root.child(this.sentence(t, SENTENCES.remote));
@@ -434,6 +461,8 @@ export default class TraceWaterfall extends View {
             .justify_between()
             .child(
               h_flex()
+                .flex_1()
+                .min_w(0)
                 .gap(8)
                 .items_center()
                 .flex_wrap()

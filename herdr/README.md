@@ -44,6 +44,8 @@ Herdr reloads a saved layout or mod at once; `herdr-app status` lists an error w
   herdr-app do pane.split '{"direction":"right","mod":"trace-waterfall","props":{"terminal":"t9"}}'
   ```
 
+- Under another panel, with `"props": { "bare": true }` on its block, the panel leaves out its own title row, so a row of the panel above can name it. Example: a `column` in place of the `overview` block, with the Session panel above and `{ "id": "session-trace", "type": "block", "content": { "mod": "trace-waterfall", "props": { "bare": true } }, "hidden": true }` below it, which a row in the Session panel shows and hides with `layout.show` and `layout.hide`.
+- While its block is hidden, or another child of its stack shows, the panel does not redraw; it redraws once when it shows again after the file changed.
 - One row per span: the request, each model call, each tool call and each subagent, nested under what started it, with its duration and estimated cost.
 - A running span grows every second, and a line marks the present moment.
 - Click a row to sum only that span and what it started; click it again, click below the rows or press Escape for the whole request. After a click in the panel, Up and Down move the selection and Left and Right page through the requests.
